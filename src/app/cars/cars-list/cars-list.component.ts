@@ -53,14 +53,13 @@ export class CarsListComponent implements OnInit, AfterViewInit {
       power: ['', CsValidators.power],
       clientFirstName: '',
       clientSurname: '',
-      cost: '',
       isFullyDamaged: '',
       year: '',
       parts: this.formBuilder.array([])
     });
   }
 
-  buildParts() : FormGroup {
+  buildParts(): FormGroup {
     return this.formBuilder.group({
       name: '',
       inStock: true,
@@ -68,15 +67,19 @@ export class CarsListComponent implements OnInit, AfterViewInit {
     });
   }
 
-//Słowo get sprawia, ze metodę parts używamy potem bez nawiasów -> this.parts.push(coś)
+  //Słowo get sprawia, ze metodę parts używamy potem bez nawiasów -> this.parts.push(coś)
   get parts(): FormArray {
     return <FormArray>this.carForm.get('parts');
   }
 
-  addPart() : void {
+  addPart(): void {
     this.parts.push(this.buildParts())
   }
-  
+
+  removePart(i): void {
+    this.parts.removeAt(i);
+  }
+
   togglePlateValidity() {
     const damageControl = this.carForm.get('isFullyDamaged');
     const plateControl = this.carForm.get('plate');
@@ -99,13 +102,19 @@ export class CarsListComponent implements OnInit, AfterViewInit {
   }
 
   addCar() {
-    // Poniższy kod zwraca obiekt formularza bez referencji i potem dodaje obiekt części jako tablcę, bo tak chce API
-    // const carFormData = Object.assign({}, this.carForm.value);
-    // carFormData.parts = [carFormData.parts];
+    // Poniższy kod zwraca obiekt formularza bez referencji i potem przypisuje wynik getPartCost() do cost
+    let carFormData = Object.assign({}, this.carForm.value);
+    carFormData.cost = this.getPartsCost(carFormData.parts);
 
-    this.carsService.addCar(this.carForm.value).subscribe(() => {
+    this.carsService.addCar(carFormData).subscribe(() => {
       this.loadCars();
     });
+  }
+
+  getPartsCost(parts) {
+    return parts.reduce((prev, nextPart) => {
+      return parseFloat(prev) + parseFloat((nextPart.price))
+    }, 0)
   }
 
   goToCarDetails(car: Car) {

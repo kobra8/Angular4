@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { CarsService } from "../cars.service";
 import { Car } from "../models/car";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators, FormArray } from "@angular/forms";
 
 @Component({
   selector: 'cs-car-details',
@@ -24,6 +24,7 @@ export class CarDetailsComponent implements OnInit {
   }
 
   buildCarForm() {
+    let parts = this.car.parts.map(part => this.formBuilder.group(part));
     return this.formBuilder.group({
       model: [this.car.model, Validators.required],
       type: this.car.type,
@@ -34,20 +35,47 @@ export class CarDetailsComponent implements OnInit {
       power: this.car.power,
       clientFirstName: this.car.clientFirstName,
       clientSurname: this.car.clientSurname,
-      cost: this.car.cost,
       isFullyDamaged: this.car.isFullyDamaged,
-      year: this.car.year
+      year: this.car.year,
+      parts: this.formBuilder.array(parts)
+    });
+  }
+  
+  buildParts(): FormGroup {
+    return this.formBuilder.group({
+      name: '',
+      inStock: true,
+      price: ''
     });
   }
 
+  //Słowo get sprawia, ze metodę parts używamy potem bez nawiasów -> this.parts.push(coś)
+  get parts(): FormArray {
+    return <FormArray>this.carForm.get('parts');
+  }
+
+  addPart(): void {
+    this.parts.push(this.buildParts())
+  }
+
+  removePart(i): void {
+    this.parts.removeAt(i);
+  }
   loadCar() {
     this.car = this.route.snapshot.data['car']
   }
 
   updateCar() {
-    this.carsService.updateCar(this.car.id, this.carForm.value).subscribe(() => {
+    let carFormData = Object.assign({}, this.carForm.value);
+    carFormData.cost = this.getPartsCost(carFormData.parts);
+
+    this.carsService.updateCar(this.car.id, carFormData).subscribe(() => {
       this.router.navigate(['/cars']);
     });
   }
-
+  getPartsCost(parts) {
+    return parts.reduce((prev, nextPart) => {
+      return parseFloat(prev) + parseFloat((nextPart.price))
+    }, 0)
+  }
 }

@@ -104,9 +104,9 @@
         </p>
       </div>
       <div class="col-sm-4">
-        <label>Cost</label>
-        <input formControlName="cost" type="text" class="form-control" placeholder="cost">
-      </div>
+        <label>Year</label>
+        <input formControlName="year" type="text" class="form-control" placeholder="year">
+      </div>   
     </div>
 
     <div class="row form-group">
@@ -118,17 +118,15 @@
         <label>Client Last Name</label>
         <input formControlName="clientSurname" type="text" class="form-control" placeholder="Client Last Name">
       </div>
-      <div class="col-sm-4">
-        <label>Year</label>
-        <input formControlName="year" type="text" class="form-control" placeholder="year">
-      </div>
     </div>
 
     <div formArrayName="parts" *ngFor="let part of parts.controls; let i = index">
       <div [formGroupName]="i" class="part-group">
         <div class="row">
           <div class="col-12">
-            <h5> {{ i + 1 }}) {{ part.value.name }}: {{ part.value?.price | currencyCustom }}</h5>
+            <h5> {{ i + 1 }}) {{ part.value.name }}: {{ part.value?.price | currencyCustom }}
+              <span (click)="removePart(i)" class="btn btn-danger float-right hand"> ( X )</span>
+            </h5>
           </div>
         </div>
         <div class="row form-group">
@@ -137,24 +135,24 @@
             <input formControlName="name" type="text" class="form-control" placeholder="part name">
           </div>
           <div class="col-sm-4">
-            <label>Is part in stock:</label>
-            <input formControlName="inStock" type="checkbox">
-          </div>
-          <div class="col-sm-4">
             <label>Part price</label>
             <input formControlName="price" type="text" class="form-control" placeholder="part price">
+          </div>
+          <div class="col-sm-4">
+            <label>Is part in stock:</label>
+            <input formControlName="inStock" type="checkbox">
           </div>
         </div>
       </div>
     </div>
 
-    <button class="btn btn-primary" (click)="addPart()">Add part</button>
+    <button class="btn btn-primary hand" (click)="addPart()">Add part</button>
 
     <div class="row">
       <div class="col-sm-12">
 
-        <button [disabled]="carForm.invalid" (click)="addCar()" class="btn btn-primary float-right">Add car</button>
-        <button (click)="carForm.reset()" class="btn btn-default float-right">Reset</button>
+        <button [disabled]="carForm.invalid" (click)="addCar()" class="btn btn-primary float-right hand">Add car</button>
+        <button (click)="carForm.reset()" class="btn btn-default float-right hand">Reset</button>
       </div>
     </div>
   </form>
