@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {CarsService} from "../cars.service";
-import {Car} from "../models/car";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { CarsService } from "../cars.service";
+import { Car } from "../models/car";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: 'cs-car-details',
@@ -10,13 +10,13 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
   styleUrls: ['./car-details.component.less']
 })
 export class CarDetailsComponent implements OnInit {
-  car : Car;
-  carForm : FormGroup;
+  car: Car;
+  carForm: FormGroup;
 
-  constructor(private carsService : CarsService,
-              private formBuilder : FormBuilder,
-              private router : Router,
-              private route : ActivatedRoute) { }
+  constructor(private carsService: CarsService,
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.loadCar();

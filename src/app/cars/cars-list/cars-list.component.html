@@ -22,14 +22,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let car of cars; let i = index" (click)="goToCarDetails(car)" class="row-car">
-            <td csImportant [ngClass]="{'row-error': car.isFullyDamaged}"> {{ car?.model | uppercase }}</td>
-            <td> {{ car?.plate }}</td>
-            <td> {{ car?.deliveryDate | date:'shortDate' }}</td>
-            <td> {{ car?.deadline | date:'shortDate' }}</td>
-            <td> {{ car?.clientFirstName }} {{ car?.clientSurname | surnameShortcut }}</td>
-            <td csImportant> {{ car?.cost | currency:'PLN':true }}</td>
-            <td (click)="removeCar(car, $event)"> ( X ) </td>
+          <!-- Poniżej component zawierający TD jest przekazany jako atrybut, bez tagów templatki-->
+          <tr *ngFor="let car of cars; let i = index" (click)="goToCarDetails(car)" class="row-car" cs-car-table-row [car]="car" (removedCar)="onRemovedCar(car)">
           </tr>
         </tbody>
       </table>
@@ -92,7 +86,7 @@
       </div>
       <div class="col-sm-4">
         <label>Is car fully damaged
-          <input formControlName="isFullyDamaged" type="checkbox">
+          <input formControlName="isFullyDamaged" type="checkbox" (change)="togglePlateValidity()">
         </label>
       </div>
     </div>
@@ -104,7 +98,10 @@
       </div>
       <div class="col-sm-4">
         <label>Power</label>
-        <input formControlName="power" type="text" class="form-control" placeholder="power">
+        <input formControlName="power" type="number" class="form-control" placeholder="power">
+        <p *ngIf="carForm.get('power').errors?.power && carForm.get('power').dirty" class="error">
+          The power must be beetwen 50 PS and 800 PS
+        </p>
       </div>
       <div class="col-sm-4">
         <label>Cost</label>
@@ -127,6 +124,32 @@
       </div>
     </div>
 
+    <div formArrayName="parts" *ngFor="let part of parts.controls; let i = index">
+      <div [formGroupName]="i" class="part-group">
+        <div class="row">
+          <div class="col-12">
+            <h5> {{ i + 1 }}) {{ part.value.name }}: {{ part.value?.price | currencyCustom }}</h5>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-sm-4">
+            <label>Part name</label>
+            <input formControlName="name" type="text" class="form-control" placeholder="part name">
+          </div>
+          <div class="col-sm-4">
+            <label>Is part in stock:</label>
+            <input formControlName="inStock" type="checkbox">
+          </div>
+          <div class="col-sm-4">
+            <label>Part price</label>
+            <input formControlName="price" type="text" class="form-control" placeholder="part price">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" (click)="addPart()">Add part</button>
+
     <div class="row">
       <div class="col-sm-12">
 
@@ -135,7 +158,5 @@
       </div>
     </div>
   </form>
-
+  <pre>{{carForm.value | json }}</pre>
 </div>
-
-
