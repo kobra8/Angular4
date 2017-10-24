@@ -7,6 +7,10 @@ import {CarsModule, CarsListComponent, CarsService, CarsRoutingModule } from "./
 import {CoreModule} from "./core-module/core.module";
 import {RouterModule} from "@angular/router";
 import {AppRoutingModule} from "./app-routing.module";
+import { LogingRoutingModule } from 'app/login/login-routing.module';
+import { LoginModule } from './login/login.module';
+import { AuthService } from './auth/auth.service';
+import { AuthGuard } from './auth/auth.guard';
 
 @NgModule({
   declarations: [
@@ -16,12 +20,14 @@ import {AppRoutingModule} from "./app-routing.module";
     BrowserModule,
     FormsModule,
     HttpModule,
+    LoginModule,
     CarsModule,
     CoreModule,
     AppRoutingModule,
-    CarsRoutingModule
+    CarsRoutingModule,
+    LogingRoutingModule
   ],
-  providers: [CarsService],
+  providers: [CarsService, AuthService, AuthGuard],
   bootstrap: [AppComponent]
 })
 
