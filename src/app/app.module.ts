@@ -11,6 +11,7 @@ import { LogingRoutingModule } from 'app/login/login-routing.module';
 import { LoginModule } from './login/login.module';
 import { AuthService } from './auth/auth.service';
 import { AuthGuard } from './auth/auth.guard';
+import { LayoutService } from 'app/shared-module/services/layout.service';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,12 @@ import { AuthGuard } from './auth/auth.guard';
     CarsRoutingModule,
     LogingRoutingModule
   ],
-  providers: [CarsService, AuthService, AuthGuard],
+  providers: [
+    CarsService, 
+    AuthService, 
+    AuthGuard, 
+    LayoutService
+  ],
   bootstrap: [AppComponent]
 })
 
