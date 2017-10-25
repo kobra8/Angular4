@@ -3,14 +3,26 @@ import {RouterModule, Route} from "@angular/router";
 import {CarDetailsComponent} from "./car-details/car-details.component";
 import {CarResolve} from "./car-resolve.service";
 import { AuthGuard } from "app/auth/auth.guard";
+import { CarsComponent } from "app/cars/cars.component";
+import { CarsListComponent } from "./cars-list/cars-list.component";
 
 const CARS_ROUTES : Route[] = [
   {
-    path: 'cars/:id',
-    component: <any>CarDetailsComponent,
-    resolve: { car: CarResolve },
-    canActivate: [AuthGuard]
-  }
+    path: '',
+    component: <any>CarsComponent,
+    children: [
+      {
+        path: '',
+        component: <any>CarsListComponent
+      },
+      {
+        path: ':id',
+        component: <any>CarDetailsComponent,
+        resolve: { car: CarResolve }
+      }
+    ]
+  },
+ 
 ];
 
 @NgModule({
