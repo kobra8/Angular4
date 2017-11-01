@@ -37,4 +37,8 @@ import { CarsComponent } from './cars.component';
     CarsComponent
   ]
 })
-export class CarsModule {}
+export class CarsModule {
+  constructor() {
+    console.log('Laizy loaded : Cars module');
+  }
+}
