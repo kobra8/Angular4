@@ -12,6 +12,8 @@ import { CostSharedService } from 'app/cars/cost-shared.service';
 import { CarTableRowComponent } from './car-table-row/car-table-row.component';
 import { CarsRoutingModule } from './cars-routing.module';
 import { CarsComponent } from './cars.component';
+import { ConfirmModalComponent } from 'app/core-module/confirm-modal/confirm-modal.component';
+import { ModalModule } from 'ngx-bootstrap';
 
 @NgModule({
   imports: [
@@ -20,6 +22,7 @@ import { CarsComponent } from './cars.component';
     RouterModule,
     ReactiveFormsModule,
     CarsRoutingModule,
+    ModalModule.forRoot()
   ],
   exports: [
     CarsListComponent
@@ -34,7 +37,11 @@ import { CarsComponent } from './cars.component';
     CarDetailsComponent, 
     IncomeTaxComponent, 
     CarTableRowComponent,
-    CarsComponent
+    CarsComponent,
+    ConfirmModalComponent
+  ],
+  entryComponents: [
+    ConfirmModalComponent
   ]
 })
 export class CarsModule {

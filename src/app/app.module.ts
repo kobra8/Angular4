@@ -9,9 +9,12 @@ import { RouterModule } from "@angular/router";
 import { AppRoutingModule } from "./app-routing.module";
 import { LoginModule } from './login/login.module';
 import { AuthService } from './auth/auth.service';
-import { AuthGuard } from './auth/auth.guard';
+import { AuthGuard } from './guards/auth.guard';
 import { LayoutService } from 'app/shared-module/services/layout.service';
-import { AuthCanLoadGuard } from 'app/auth/auth-can-load.guard';
+import { AuthCanLoadGuard } from 'app/guards/auth-can-load.guard';
+import { FormCanDeactivateGuard } from 'app/guards/form-can-deactivate.guard';
+import { ModalModule } from 'ngx-bootstrap';
+import { ConfirmModalService } from 'app/core-module/confirm-modal/confirm-modal.service';
 
 @NgModule({
   declarations: [
@@ -23,14 +26,17 @@ import { AuthCanLoadGuard } from 'app/auth/auth-can-load.guard';
     HttpModule,
     LoginModule,
     CoreModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ModalModule.forRoot()
   ],
   providers: [
     CarsService, 
     AuthService, 
     AuthGuard,
     AuthCanLoadGuard,
-    LayoutService
+    FormCanDeactivateGuard,
+    LayoutService,
+    ConfirmModalService
   ],
   bootstrap: [AppComponent]
 })

@@ -1,8 +1,8 @@
 import {NgModule} from "@angular/core";
 import {RouterModule, Route} from "@angular/router";
 import {CarsListComponent} from "./cars/cars-list/cars-list.component";
-import { AuthGuard } from 'app/auth/auth.guard';
-import { AuthCanLoadGuard } from 'app/auth/auth-can-load.guard';
+import { AuthGuard } from 'app/guards/auth.guard';
+import { AuthCanLoadGuard } from 'app/guards/auth-can-load.guard';
 
 const APP_ROUTES : Route[] = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },

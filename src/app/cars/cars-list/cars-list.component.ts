@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewEncapsulation, ViewChild, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewEncapsulation, ViewChild, ViewChildren, QueryList, Input } from '@angular/core';
 import { Car } from "../models/car";
 import { TotalCostComponent } from "../total-cost/total-cost.component";
 import { CarsService } from "../cars.service";
@@ -7,6 +7,10 @@ import { FormBuilder, FormGroup, Validators, FormArray } from "@angular/forms";
 import { CostSharedService } from 'app/cars/cost-shared.service';
 import { CarTableRowComponent } from '../car-table-row/car-table-row.component';
 import { CsValidators } from '../../shared-module/validators/cs-validators';
+import { CanComponentDeactivate } from 'app/guards/form-can-deactivate.guard';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { ConfirmModalComponent } from 'app/core-module/confirm-modal/confirm-modal.component'
+import { ConfirmModalService } from 'app/core-module/confirm-modal/confirm-modal.service';
 
 @Component({
   selector: 'cs-cars-list',
@@ -14,7 +18,7 @@ import { CsValidators } from '../../shared-module/validators/cs-validators';
   styleUrls: ['./cars-list.component.less'],
   encapsulation: ViewEncapsulation.None
 })
-export class CarsListComponent implements OnInit, AfterViewInit {
+export class CarsListComponent implements OnInit, AfterViewInit, CanComponentDeactivate {
   @ViewChild("totalCostRef") totalCostRef: TotalCostComponent;
   //View child daje dostęp do jednego komponentu zagnieżdżonego
   @ViewChildren(CarTableRowComponent) carRows: QueryList<CarTableRowComponent>;
@@ -23,11 +27,18 @@ export class CarsListComponent implements OnInit, AfterViewInit {
   grossCost: number;
   cars: Car[] = [];
   carForm: FormGroup;
+  public bsModalRef: BsModalRef;
+  private confirmAnswer: boolean;
 
   constructor(private carsService: CarsService,
     private formBuilder: FormBuilder,
     private costSharedService: CostSharedService,
-    private router: Router) { }
+    private router: Router,
+    private modalService: BsModalService,
+    private confirmModalService: ConfirmModalService
+  ) {
+  
+   }
 
   ngOnInit() {
     this.loadCars();
@@ -143,5 +154,31 @@ export class CarsListComponent implements OnInit, AfterViewInit {
 
   onShownGross(grossCost: number): void {
     this.grossCost = grossCost;
+  }
+
+  //Guard sprawdzający czy formularz nie został opuszczony przed zapisaniem
+ 
+  canDeactivate() {
+    if (!this.carForm.dirty) {
+      return true;
+    }
+    this.confirmModalService.confirmSource$.subscribe(x => {
+      this.confirmAnswer = x;
+      console.log(this.confirmAnswer);
+    })
+    this.openModal()
+    console.log("openModal" + this.confirmAnswer)
+    return this.confirmAnswer
+    //return window.confirm('Discard Changes?');
+  }
+  private openModal(): void {
+    this.bsModalRef = this.modalService.show(ConfirmModalComponent)
+  }
+
+  private confirmModal() {
+    this.confirmModalService.confirmSource$.subscribe(x => {
+      this.confirmAnswer = x;
+    })
+    console.log("confirmmethod" + this.confirmAnswer)
   }
 }
