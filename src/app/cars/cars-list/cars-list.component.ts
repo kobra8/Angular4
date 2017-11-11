@@ -28,14 +28,13 @@ export class CarsListComponent implements OnInit, AfterViewInit, CanComponentDea
   cars: Car[] = [];
   carForm: FormGroup;
   public bsModalRef: BsModalRef;
-  private confirmAnswer: boolean;
 
   constructor(private carsService: CarsService,
     private formBuilder: FormBuilder,
     private costSharedService: CostSharedService,
     private router: Router,
     private modalService: BsModalService,
-    private confirmModalService: ConfirmModalService
+    private confirmModalService: ConfirmModalService,
   ) {
   
    }
@@ -162,23 +161,10 @@ export class CarsListComponent implements OnInit, AfterViewInit, CanComponentDea
     if (!this.carForm.dirty) {
       return true;
     }
-    this.confirmModalService.confirmSource$.subscribe(x => {
-      this.confirmAnswer = x;
-      console.log(this.confirmAnswer);
-    })
-    this.openModal()
-    console.log("openModal" + this.confirmAnswer)
-    return this.confirmAnswer
-    //return window.confirm('Discard Changes?');
-  }
-  private openModal(): void {
-    this.bsModalRef = this.modalService.show(ConfirmModalComponent)
-  }
-
-  private confirmModal() {
-    this.confirmModalService.confirmSource$.subscribe(x => {
-      this.confirmAnswer = x;
-    })
-    console.log("confirmmethod" + this.confirmAnswer)
+    // Własna wersja modal z ngx-bootstrap z dodaniem serwisu confirmModalService
+    //Modal z konfiguracją tła jako statyczne -> nie zamyka na click tła
+    this.bsModalRef = this.modalService.show(ConfirmModalComponent, {backdrop: "static"})
+    return this.confirmModalService.confirmSource$.asObservable();
+    // z tutoriala =>return window.confirm('Discard Changes?');
   }
 }
