@@ -28,6 +28,7 @@ export class CarsListComponent implements OnInit, AfterViewInit, CanComponentDea
   cars: Car[] = [];
   carForm: FormGroup;
   public bsModalRef: BsModalRef;
+  private discardModalFlag = false;
 
   constructor(private carsService: CarsService,
     private formBuilder: FormBuilder,
@@ -36,8 +37,8 @@ export class CarsListComponent implements OnInit, AfterViewInit, CanComponentDea
     private modalService: BsModalService,
     private confirmModalService: ConfirmModalService,
   ) {
-  
-   }
+
+  }
 
   ngOnInit() {
     this.loadCars();
@@ -115,7 +116,7 @@ export class CarsListComponent implements OnInit, AfterViewInit, CanComponentDea
     // Poniższy kod zwraca obiekt formularza bez referencji i potem przypisuje wynik getPartCost() do cost
     let carFormData = Object.assign({}, this.carForm.value);
     carFormData.cost = this.getPartsCost(carFormData.parts);
-
+    this.discardModalFlag = true;
     this.carsService.addCar(carFormData).subscribe(() => {
       this.loadCars();
     });
@@ -156,14 +157,17 @@ export class CarsListComponent implements OnInit, AfterViewInit, CanComponentDea
   }
 
   //Guard sprawdzający czy formularz nie został opuszczony przed zapisaniem
- 
+
   canDeactivate() {
     if (!this.carForm.dirty) {
       return true;
     }
+    if (this.carForm.dirty && this.discardModalFlag) {
+      return true;
+    }
     // Własna wersja modal z ngx-bootstrap z dodaniem serwisu confirmModalService
     //Modal z konfiguracją tła jako statyczne -> nie zamyka na click tła
-    this.bsModalRef = this.modalService.show(ConfirmModalComponent, {backdrop: "static"})
+    this.bsModalRef = this.modalService.show(ConfirmModalComponent, { backdrop: "static" })
     return this.confirmModalService.confirmSource$.asObservable();
     // z tutoriala =>return window.confirm('Discard Changes?');
   }

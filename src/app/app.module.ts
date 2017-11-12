@@ -15,11 +15,12 @@ import { AuthCanLoadGuard } from 'app/guards/auth-can-load.guard';
 import { FormCanDeactivateGuard } from 'app/guards/form-can-deactivate.guard';
 import { ModalModule } from 'ngx-bootstrap';
 import { ConfirmModalService } from 'app/core-module/confirm-modal/confirm-modal.service';
+import { SharedModule } from 'app/shared-module/shared.module';
 
 @NgModule({
   declarations: [
-    AppComponent
-  ],
+    AppComponent,
+    ],
   imports: [
     BrowserModule,
     FormsModule,
@@ -27,7 +28,8 @@ import { ConfirmModalService } from 'app/core-module/confirm-modal/confirm-modal
     LoginModule,
     CoreModule,
     AppRoutingModule,
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    SharedModule
   ],
   providers: [
     CarsService, 
@@ -36,7 +38,10 @@ import { ConfirmModalService } from 'app/core-module/confirm-modal/confirm-modal
     AuthCanLoadGuard,
     FormCanDeactivateGuard,
     LayoutService,
-    ConfirmModalService
+    ConfirmModalService,
+  ],
+  entryComponents: [
+  
   ],
   bootstrap: [AppComponent]
 })

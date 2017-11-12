@@ -4,6 +4,7 @@ import { HeaderComponent } from './header/header.component';
 import { SurnameShortcutPipe } from './pipes/surname-shortcut.pipe';
 import { CurrencyCustomPipe } from './pipes/currency-custom.pipe';
 import { ImportantDirective } from './directives/important.directive';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { ImportantDirective } from './directives/important.directive';
     HeaderComponent, 
     SurnameShortcutPipe, 
     CurrencyCustomPipe,
-    ImportantDirective]
+    ImportantDirective,
+    PageNotFoundComponent]
 })
 export class SharedModule {
 }

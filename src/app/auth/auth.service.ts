@@ -21,7 +21,7 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       if (login === this.credentials.login && password === this.credentials.password) {
         this.isUserLoggedIn = true;
-        this.layoutService.showSidebar();
+    
         resolve();
       }
       else {
