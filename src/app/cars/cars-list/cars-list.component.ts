@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewEncapsulation, ViewChild, ViewChildren, QueryList, Input } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewEncapsulation, ViewChild, ViewChildren, QueryList, Input, ElementRef, Renderer2 } from '@angular/core';
 import { Car } from "../models/car";
 import { TotalCostComponent } from "../total-cost/total-cost.component";
 import { CarsService } from "../cars.service";
@@ -20,6 +20,7 @@ import { ConfirmModalService } from 'app/core-module/confirm-modal/confirm-modal
 })
 export class CarsListComponent implements OnInit, AfterViewInit, CanComponentDeactivate {
   @ViewChild("totalCostRef") totalCostRef: TotalCostComponent;
+  @ViewChild("addCarTitle") addCarTitle: ElementRef;
   //View child daje dostęp do jednego komponentu zagnieżdżonego
   @ViewChildren(CarTableRowComponent) carRows: QueryList<CarTableRowComponent>;
   // View children daje dostęp do listy komponentów zagnieżdżonych -> QueryList zawiera metody obsługi listy komponentów
@@ -30,9 +31,11 @@ export class CarsListComponent implements OnInit, AfterViewInit, CanComponentDea
   public bsModalRef: BsModalRef;
   private discardModalFlag = false;
 
-  constructor(private carsService: CarsService,
+  constructor(
+    private carsService: CarsService,
     private formBuilder: FormBuilder,
     private costSharedService: CostSharedService,
+    private renderer: Renderer2,
     private router: Router,
     private modalService: BsModalService,
     private confirmModalService: ConfirmModalService,
@@ -51,13 +54,23 @@ export class CarsListComponent implements OnInit, AfterViewInit, CanComponentDea
         console.log('Warning, Client Kowalski is next!!')
       }
     })
+    const addCarTitle = this.addCarTitle.nativeElement;
+    this.carForm.valueChanges.subscribe( () => {
+      if(this.carForm.invalid) {
+        this.renderer.setStyle(addCarTitle, 'color', 'red'); // renderer -> warstwa abstrakcyjna dostepu do DOM
+       // addCarTitle.style.color = "red" -> natywny sposób dostepu -> niewskazany
+      }
+      else {
+        this.renderer.setStyle(addCarTitle, 'color', 'white')
+      }
+    })
   }
 
   buildCarForm() {
     return this.formBuilder.group({
       model: ['', Validators.required],
       type: '',
-      plate: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(7)]],
+      plate: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(8)]],
       deliveryDate: '',
       deadline: '',
       color: '',
@@ -99,7 +112,7 @@ export class CarsListComponent implements OnInit, AfterViewInit, CanComponentDea
       plateControl.clearValidators();
     }
     else {
-      plateControl.setValidators([Validators.required, Validators.minLength(3), Validators.maxLength(7)])
+      plateControl.setValidators([Validators.required, Validators.minLength(3), Validators.maxLength(8)])
     }
     plateControl.updateValueAndValidity();
   }

@@ -28,7 +28,7 @@ export class CarDetailsComponent implements OnInit {
     return this.formBuilder.group({
       model: [this.car.model, Validators.required],
       type: this.car.type,
-      plate: [this.car.plate, [Validators.required, Validators.minLength(3), Validators.maxLength(7)]],
+      plate: [this.car.plate, [Validators.required, Validators.minLength(3), Validators.maxLength(8)]],
       deliveryDate: this.car.deliveryDate,
       deadline: this.car.deadline,
       color: this.car.color,

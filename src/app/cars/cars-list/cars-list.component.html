@@ -23,7 +23,8 @@
         </thead>
         <tbody>
           <!-- Poniżej component zawierający TD jest przekazany jako atrybut, bez tagów templatki-->
-          <tr *ngFor="let car of cars; let i = index" (click)="goToCarDetails(car)" class="row-car" cs-car-table-row [car]="car" (removedCar)="onRemovedCar(car)">
+          <tr *ngFor="let car of cars; let i = index" (click)="goToCarDetails(car)" 
+          class="row-car" cs-car-table-row [car]="car" (removedCar)="onRemovedCar(car)">
           </tr>
         </tbody>
       </table>
@@ -52,7 +53,7 @@
   </div>
 </div>
 
-<p class="data-header">Add a new car</p>
+<p class="data-header" #addCarTitle>Add a new car</p>
 
 <div class="data-container">
   <form [formGroup]="carForm">
