@@ -14,6 +14,7 @@ import { CarsRoutingModule } from './cars-routing.module';
 import { CarsComponent } from './cars.component';
 import { ConfirmModalComponent } from 'app/core-module/confirm-modal/confirm-modal.component';
 import { ModalModule } from 'ngx-bootstrap';
+import { DateInfoComponent } from './car-details/date-info/date-info.component';
 
 @NgModule({
   imports: [
@@ -38,7 +39,8 @@ import { ModalModule } from 'ngx-bootstrap';
     IncomeTaxComponent, 
     CarTableRowComponent,
     CarsComponent,
-    ConfirmModalComponent
+    ConfirmModalComponent,
+    DateInfoComponent
   ],
   entryComponents: [
     ConfirmModalComponent
