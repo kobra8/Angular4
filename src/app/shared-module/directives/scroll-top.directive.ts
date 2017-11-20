@@ -10,7 +10,7 @@ private scrollPosition = 0;
 
 @HostBinding('class') scrollTopBtn = 'scroll-top-btn';
 
-@HostListener('click') onClick() {
+@HostListener('click') onClick(e) {
   let i = this.scrollPosition;
   let int = setInterval( () => {
     window.scrollTo(0,i);

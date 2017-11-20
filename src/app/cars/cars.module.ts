@@ -43,7 +43,8 @@ import { DateInfoComponent } from './car-details/date-info/date-info.component';
     DateInfoComponent
   ],
   entryComponents: [
-    ConfirmModalComponent
+    ConfirmModalComponent,
+    DateInfoComponent
   ]
 })
 export class CarsModule {

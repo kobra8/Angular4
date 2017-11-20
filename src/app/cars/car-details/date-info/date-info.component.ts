@@ -15,6 +15,6 @@ export class DateInfoComponent {
 
   getElapsedDays() {
     const elapsedMilliseconds = +new Date() - +new Date(this.car.deliveryDate);
-    this.checkElapsedDays.emit(elapsedMilliseconds / (1000 * 60 * 60 * 24));
+    this.checkElapsedDays.emit(Math.round(elapsedMilliseconds / (1000 * 60 * 60 * 24)));
   }
 }

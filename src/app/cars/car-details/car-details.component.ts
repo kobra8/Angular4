@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef, ComponentFactoryResolver, ComponentRef, Type } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { CarsService } from "../cars.service";
 import { Car } from "../models/car";
 import { FormBuilder, FormGroup, Validators, FormArray } from "@angular/forms";
+import { DateInfoComponent } from './date-info/date-info.component';
 
 @Component({
   selector: 'cs-car-details',
@@ -10,17 +11,44 @@ import { FormBuilder, FormGroup, Validators, FormArray } from "@angular/forms";
   styleUrls: ['./car-details.component.less']
 })
 export class CarDetailsComponent implements OnInit {
+  @ViewChild('dateInfoContainer', {read: ViewContainerRef}) dateInfoContainer: ViewContainerRef
+  // Powyżej do view child dodajemy opcję: read, która zmienia zwracany typ na ViewContainerRef zamiast domyślnego zwracanego przez ViewChild 'ElementRef'
   car: Car;
   carForm: FormGroup;
+  elapsedDays: number;
+  dateInfoRef;
 
-  constructor(private carsService: CarsService,
+  constructor(
+    private carsService: CarsService,
     private formBuilder: FormBuilder,
+    private componentFactoryResolver: ComponentFactoryResolver,
     private router: Router,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit() {
     this.loadCar();
     this.carForm = this.buildCarForm();
+  }
+
+  createDateInfoComponent() {
+    console.log(this.componentFactoryResolver)
+    if(this.dateInfoContainer.get(0) !== null) {
+      return;
+    }
+    const dateInfofactory = this.componentFactoryResolver.resolveComponentFactory(<Type<DateInfoComponent>>DateInfoComponent);
+    this.dateInfoRef = <ComponentRef<DateInfoComponent>>this.dateInfoContainer.createComponent(dateInfofactory);
+    //Przekazanie danych do dynamicznego komponentu poprzez parametr instance
+    this.dateInfoRef.instance.car = this.car;
+    this.dateInfoRef.instance.checkElapsedDays.subscribe((x) => {
+      this.elapsedDays = x
+    })
+  }
+
+  clearDateInfoContainer() {
+   // this.dateInfoContainer.clear(); // Tu czyścimy kontener
+   // this.dateInfoContainer.remove(0); // Tu usuwamy komponent na konkretnym indeksie kontenera
+    this.dateInfoRef.destroy(); // Tu usuwamy konkretny dynamiczny komponent
   }
 
   buildCarForm() {
