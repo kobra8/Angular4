@@ -6,6 +6,7 @@ import { CurrencyCustomPipe } from './pipes/currency-custom.pipe';
 import { ImportantDirective } from './directives/important.directive';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ScrollTopDirective } from './directives/scroll-top.directive';
+import { TimerComponent } from './timer/timer.component';
 
 @NgModule({
   imports: [
@@ -16,14 +17,17 @@ import { ScrollTopDirective } from './directives/scroll-top.directive';
     SurnameShortcutPipe, 
     CurrencyCustomPipe, 
     ImportantDirective,
-    ScrollTopDirective],
+    ScrollTopDirective,
+    TimerComponent
+  ],
   declarations: [
     HeaderComponent, 
     SurnameShortcutPipe, 
     CurrencyCustomPipe,
     ImportantDirective,
     PageNotFoundComponent,
-    ScrollTopDirective]
+    ScrollTopDirective,
+    TimerComponent]
 })
 export class SharedModule {
 }

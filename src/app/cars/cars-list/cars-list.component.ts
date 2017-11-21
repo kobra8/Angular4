@@ -30,6 +30,7 @@ export class CarsListComponent implements OnInit, AfterViewInit, CanComponentDea
   carForm: FormGroup;
   public bsModalRef: BsModalRef;
   private discardModalFlag = false;
+  counter = 0;
 
   constructor(
     private carsService: CarsService,
@@ -64,6 +65,13 @@ export class CarsListComponent implements OnInit, AfterViewInit, CanComponentDea
         this.renderer.setStyle(addCarTitle, 'color', 'white')
       }
     })
+  }
+
+  ngAfterViewChecked() {
+   // this.counter++;
+   // console.log('this.counter', this.counter);
+    // Ten przykład pokazuje, że system detekcji uruchamia się za każdym przeładowaniem setInterval, czyli jeden kompomemt uruchamia system detekcji dla całej aplikacji
+    // czyli trzeba uważać z funkcjami czasu bo obciązają system
   }
 
   buildCarForm() {
